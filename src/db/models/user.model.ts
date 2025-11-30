@@ -18,7 +18,7 @@ export class User {
   @Prop({
     type: String,
     required: true,
-    unique:true
+    unique: true,
   })
   email: string;
 
@@ -29,23 +29,22 @@ export class User {
   password: string;
 
   @Prop({
-    type: Number
+    type: Number,
   })
   age: number;
 
   @Prop({
     type: String,
-    default:GenderEnum.MALE
+    default: GenderEnum.MALE,
   })
   gender: GenderEnum;
 }
 
-export const userSchema = SchemaFactory.createForClass(User)
+export const userSchema = SchemaFactory.createForClass(User);
 
 export const UserModel = MongooseModule.forFeature([
-    {
-        name: User.name,
-        schema: userSchema
-    }
-])
-
+  {
+    name: User.name,
+    schema: userSchema,
+  },
+]);
