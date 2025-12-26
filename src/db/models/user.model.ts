@@ -38,6 +38,12 @@ export class User {
     default: GenderEnum.MALE,
   })
   gender: GenderEnum;
+
+  @Prop({
+    type: Boolean,
+    default: false,
+  })
+  isConfirmed: boolean;
 }
 
 export const userSchema = SchemaFactory.createForClass(User);

@@ -1,9 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Types } from 'mongoose';
 import { customAlphabet } from 'nanoid';
 import { OTPTypeEnum } from 'src/db/models/otp.model';
 import { OTPRepo } from 'src/db/repo/otp.repo';
-import { createHash } from '../security/hash';
+import { comparehash, createHash } from '../security/hash';
 
 @Injectable()
 export class OTPService {
@@ -46,5 +46,32 @@ export class OTPService {
       isOTPExist.expireIn = new Date(Date.now() + 30 * 1000);
       return otp;
     }
+  }
+
+  async validationOtp({
+    otp,
+    userId,
+    type
+  }:{
+    otp:string,
+    userId:Types.ObjectId,
+    type:OTPTypeEnum
+  }){
+    const userOtp=await this.otpRepo.findOne({
+      filter:{
+        userId,
+        type
+      }
+    })
+    if(!userOtp){
+      throw new NotFoundException("otp not found")
+    }
+    if(userOtp.expireIn<new Date(Date.now())){
+      throw new BadRequestException("otp expired")
+    }
+    if(!await comparehash(otp,userOtp.otp)){
+      throw new BadRequestException("otp not correct")
+    }
+    await userOtp.deleteOne()
   }
 }

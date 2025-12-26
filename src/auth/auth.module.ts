@@ -6,10 +6,12 @@ import { UserRepo } from 'src/db/repo/user.repo';
 import { OTPRepo } from 'src/db/repo/otp.repo';
 import { OTPModel } from 'src/db/models/otp.model';
 import { OTPService } from 'src/common/utils/email/createOTP';
+import { JwtService } from 'src/common/utils/security/token';
+import { JwtService as JWT} from '@nestjs/jwt';
 
 @Module({
   imports: [UserModel, OTPModel],
-  providers: [AuthService, UserRepo, OTPRepo, OTPService],
+  providers: [AuthService, UserRepo, OTPRepo, OTPService,JWT,JwtService],
   controllers: [AuthController],
 })
 export class AuthModule {}

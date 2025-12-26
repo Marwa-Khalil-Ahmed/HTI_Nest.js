@@ -48,7 +48,7 @@ export abstract class DBRepo<T> {
     return await this.model.findById(id, projection, options);
   }
 
-  async create({ data }: { data: T }) {
+  async create({ data }: { data: Partial<T> }) {
     return await this.model.create(data);
   }
 
